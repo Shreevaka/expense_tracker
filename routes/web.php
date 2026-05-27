@@ -6,6 +6,7 @@ use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\Admin\ExpenseCategoryController;
 use App\Http\Controllers\Admin\IncomeCategoryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\User\WalletController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +51,9 @@ Route::middleware(['auth', 'role:user'])
         Route::get('/dashboard', [UserDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Route::resource('wallets', \App\Http\Controllers\User\WalletController::class);
+        Route::post('status-change-wallet', [WalletController::class, 'updateWalletStatus'])->name('update.wallet.status');
+
+        Route::resource('wallets', WalletController::class);
 
         // Route::resource('transactions', \App\Http\Controllers\User\TransactionController::class);
     });

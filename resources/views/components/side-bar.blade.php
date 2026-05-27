@@ -161,6 +161,15 @@
 
         <li class="menu-label">Management</li>
 
+        @role('user')
+        <li class="menu-item">
+            <a href="{{ route('user.wallets.index') }}" class="menu-link {{ $activePage == 'wallet' ? 'active' : '' }}">
+                <i class="fas fa-wallet"></i>
+                <span>Wallets</span>
+            </a>
+        </li>
+        @endrole
+
         @role('admin')
         <li class="menu-item">
             <a href="{{ route('admin.users.index') }}" class="menu-link {{ $activePage == 'user' ? 'active' : '' }}">
