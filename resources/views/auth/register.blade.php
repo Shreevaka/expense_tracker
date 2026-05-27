@@ -1,7 +1,19 @@
 <x-guest-layout>
     <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+            <div class="flex flex-col items-center">
+
+                <div class="w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center overflow-hidden">
+                    <img src="{{ asset('assets/img/logo.png') }}"
+                        alt="Logo"
+                        class="w-full h-full object-cover">
+                </div>
+
+                <span class="mt-2 text-lg font-semibold text-gray-700">
+                    ExpenseX
+                </span>
+
+            </div>
         </x-slot>
 
         <x-validation-errors class="mb-4" />
@@ -17,6 +29,10 @@
             <div class="mt-4">
                 <x-label for="email" value="{{ __('Email') }}" />
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            </div>
+            <div class="mt-4">
+                <x-label for="email" value="{{ __('Contact Number') }}" />
+                <x-input id="email" class="block mt-1 w-full" type="text" name="contact_no" :value="old('contact_no')" required autocomplete="contact_no" />
             </div>
 
             <div class="mt-4">
@@ -46,8 +62,8 @@
                 </div>
             @endif
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <div class="flex items-center justify-between mt-5">
+                <a class="text-sm text-indigo-600 hover:text-indigo-900 font-medium" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
 
