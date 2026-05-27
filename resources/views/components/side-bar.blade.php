@@ -162,7 +162,7 @@
         <li class="menu-label">Management</li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.users.index') }}" class="menu-link {{ $activePage == 'user' ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span>Users</span>
             </a>

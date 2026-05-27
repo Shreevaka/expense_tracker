@@ -29,6 +29,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'contact_no',
+        'preferred_currency',
+        'is_active',
+        'profile_photo_path',
     ];
 
     /**
@@ -59,5 +63,24 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'image_url',
     ];
+
+    public function wallets()
+    {
+        return $this->hasMany(Wallet::class);
+    }
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->profile_photo_path) {
+            return asset('storage/' . $this->profile_photo_path);
+        }else{
+            return asset('assets/img/default-profile-image.jpg');
+        }
+    }
 }
