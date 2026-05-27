@@ -37,6 +37,16 @@ class ExpenseCategoryService
         return $this->expenseCategory->where('is_active', 1)->get();
     }
 
+    public function activeCount()
+    {
+        return $this->expenseCategory->where('is_active', 1)->count();
+    }
+
+    public function deactiveCount()
+    {
+        return $this->expenseCategory->where('is_active', 0)->count();
+    }
+
     public function first()
     {
         return $this->expenseCategory->first();

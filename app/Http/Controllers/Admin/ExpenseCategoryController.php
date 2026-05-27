@@ -19,7 +19,12 @@ class ExpenseCategoryController extends Controller
 
             $categories = ExpenseCategoryFacade::allWithParamAndPaginate($request->all());
 
-            return view('pages.admin.expense_category.index', compact('categories'));
+            $allCategories = ExpenseCategoryFacade::all();
+            $totalCount = $allCategories->count();
+            $activeCount = ExpenseCategoryFacade::activeCount();
+            $inactiveCount = ExpenseCategoryFacade::deactiveCount();
+
+            return view('pages.admin.expense_category.index', compact('categories','totalCount','activeCount','inactiveCount'));
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Something went wrong');
         }
@@ -42,7 +47,7 @@ class ExpenseCategoryController extends Controller
 
             ExpenseCategoryFacade::store($request->all());
 
-            return redirect()->route('expense-category.index')->with('success', 'Category Added Successfully');
+            return redirect()->route('admin.expense-categories.index')->with('success', 'Category Added Successfully');
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Something went wrong');
         }
@@ -81,7 +86,7 @@ class ExpenseCategoryController extends Controller
 
             ExpenseCategoryFacade::update($id, $request->all());
 
-            return redirect()->route('expense-category.index')->with('success', 'Category Updated Successfully');
+            return redirect()->route('admin.expense-categories.index')->with('success', 'Category Updated Successfully');
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Something went wrong');
         }
