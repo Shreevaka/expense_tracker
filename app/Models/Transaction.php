@@ -9,6 +9,10 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'category',
+    ];
+
     public function category()
     {
         return $this->morphTo();
@@ -22,5 +26,18 @@ class Transaction extends Model
     public function wallet()
     {
         return $this->belongsTo(Wallet::class);
+    }
+
+    public function getCategoryAttribute()
+    {
+        $category = null;
+
+        if ($this->category_type == 'App\Models\ExpenseCategory') {
+            $category = 'expense';
+        }elseif ($this->category_type == 'App\Models\IncomeCategory') {
+            $category = 'income';
+        }
+
+        return $category;
     }
 }

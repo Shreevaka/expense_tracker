@@ -141,10 +141,11 @@
                             <td class="pe-4 text-center">
                                 <div class="d-flex justify-content-center gap-2">
                                     <!-- View Action -->
-                                    <button class="btn btn-action btn-action-info view-wallet-btn"
-                                            title="View Details">
+                                    <a href="{{ route('user.wallets.show', $wallet->id) }}"
+                                    class="btn btn-action btn-action-info"
+                                    title="View Details">
                                         <i class="far fa-eye"></i>
-                                    </button>
+                                    </a>
 
                                     <!-- Edit Action -->
                                     <button class="btn btn-action btn-action-warning edit-wallet-btn" 

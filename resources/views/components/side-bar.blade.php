@@ -153,7 +153,9 @@
         <li class="menu-label">Main Menu</li>
         
         <li class="menu-item">
-            <a href="{{ route('admin.dashboard') }}" class="menu-link {{ $activePage == 'dashboard' ? 'active' : '' }}">
+            <a href="{{ auth()->user()->hasRole('admin') 
+            ? route('admin.dashboard') 
+            : route('user.dashboard') }}" class="menu-link {{ $activePage == 'dashboard' ? 'active' : '' }}">
                 <i class="fas fa-th-large"></i>
                 <span>Dashboard</span>
             </a>

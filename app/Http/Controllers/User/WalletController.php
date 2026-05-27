@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Throwable;
 use domain\Facades\WalletFacade;
+use domain\Facades\TransactionFacade;
 use Illuminate\Support\Facades\Config;
 
 class WalletController extends Controller
@@ -59,7 +60,25 @@ class WalletController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $wallet = WalletFacade::get($id);
+
+        if (!$wallet) {
+            return redirect()
+                ->back()
+                ->with('error', 'Wallet not found.');
+        }
+        
+        if ($wallet->user_id != auth()->id()) {
+            return redirect()
+                ->back()
+                ->with('error', 'You do not have access.');
+        }
+
+        $totalCount = $wallet->transactions()->count();
+        $totalExpense = TransactionFacade::userTotalAmountInWalletByCategory($id, 'expense');
+        $transactions = TransactionFacade::walletTransactionWithPaginate($id);
+
+        return view('pages.user.wallet.show', compact('wallet','totalCount','totalExpense','transactions'));
     }
 
     /**
