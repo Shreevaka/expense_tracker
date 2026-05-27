@@ -72,66 +72,6 @@
 
 
 
-<style>
-    .stat-card {
-        background: #fff;
-        padding: 1.5rem;
-        border-radius: 16px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-        transition: transform 0.2s;
-    }
-
-    .stat-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .stat-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-    }
-
-    .stat-info {
-        flex: 1;
-    }
-
-    .stat-label {
-        font-size: 0.875rem;
-        color: var(--text-muted);
-        font-weight: 500;
-        display: block;
-        margin-bottom: 0.25rem;
-    }
-
-    .stat-value {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin: 0;
-        color: var(--text-main);
-    }
-
-    .stat-trend {
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-
-    /* Soft Backgrounds */
-    .bg-primary-soft { background-color: rgba(79, 70, 229, 0.1); }
-    .bg-success-soft { background-color: rgba(34, 197, 94, 0.1); }
-    .bg-warning-soft { background-color: rgba(245, 158, 11, 0.1); }
-    .bg-info-soft { background-color: rgba(6, 182, 212, 0.1); }
-    .bg-danger-soft { background-color: rgba(239, 68, 68, 0.1); }
-
-
-</style>
-
 @endsection
 
 
