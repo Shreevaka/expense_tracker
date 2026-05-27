@@ -10,4 +10,11 @@ class IncomeCategory extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = ['name', 'description', 'is_active'];
+
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'category');
+    }
 }
