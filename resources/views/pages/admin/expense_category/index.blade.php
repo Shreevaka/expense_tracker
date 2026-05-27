@@ -70,7 +70,7 @@
                     Search
                 </button>
                 @if(request('sr'))
-                    <a href="{{ route('admin.expense-categories.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('admin.expense-categories.index') }}" class="btn btn-outline-custom" title="Clear Search">
                         <i class="fas fa-redo"></i>
                     </a>
                 @endif
@@ -177,24 +177,10 @@
                 </tbody>
             </table>
         </div>
-        
-        <!-- Pagination Area -->
-        @if($categories->hasPages())
-            <div class="d-flex justify-content-between align-items-center p-4 border-top border-light">
-                <div class="text-muted small">
-                    Showing {{ $categories->firstItem() }} to {{ $categories->lastItem() }} of {{ $categories->total() }} results
-                </div>
-                <div class="pagination-wrapper-modern">
-                    {{ $categories->appends(request()->query())->links('pagination::bootstrap-5') }}
-                </div>
-            </div>
-        @endif
+
+        {{ $categories->withQueryString()->links('components.paginations') }}
     </div>
 </div>
-
-<!-- ========================================================================= -->
-<!-- MODALS -->
-<!-- ========================================================================= -->
 
 <!-- Create Category Modal -->
 <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-labelledby="createCategoryModalLabel" aria-hidden="true">
@@ -275,7 +261,6 @@
                         <span id="view_avatar_initial">E</span>
                     </div>
                     <h4 class="fw-bold text-dark mb-1" id="view_name">Marketing</h4>
-                    <span class="badge rounded-pill id-badge text-indigo bg-indigo-soft">Category ID: #<span id="view_id">12</span></span>
                 </div>
                 
                 <div class="divider mb-4"></div>
@@ -287,22 +272,21 @@
                             No description given.
                         </div>
                     </div>
-                    <div class="col-6">
-                        <label class="small text-muted fw-semibold d-block mb-1">Status</label>
-                        <span class="badge py-2 px-3 fs-6 rounded-pill" id="view_status_badge">Active</span>
+                    <div class="col-12 d-flex align-items-center gap-2">
+                        <label class="small text-muted fw-semibold mb-0">Status:</label>
+                        <span class="badge py-2 px-3 rounded-pill" id="view_status_badge">Active</span>
                     </div>
                     <div class="col-6">
                         <label class="small text-muted fw-semibold d-block mb-1">Created At</label>
-                        <div class="fw-bold text-dark fs-6" id="view_created_at">Oct 24, 2026</div>
+                        <div class="text-muted small" id="view_created_at">Oct 24, 2026</div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <label class="small text-muted fw-semibold d-block mb-1">Last Updated</label>
                         <div class="text-muted small" id="view_updated_at">Oct 25, 2026 09:30 AM</div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer border-0 p-4 pt-0 d-flex justify-content-end">
-                <button type="button" class="btn btn-indigo px-4" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -418,6 +402,26 @@
         color: #fff;
         border-color: var(--indigo-hover);
         box-shadow: 0 4px 12px var(--indigo-shadow);
+    }
+
+    .btn-outline-custom {
+        background-color: transparent;
+        color: #64748b;
+        border: 1px solid #cbd5e1;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 0.6rem 1.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .btn-outline-custom:hover {
+        background-color: #f1f5f9;
+        color: #1e293b;
+        border-color: #94a3b8;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
     .shadow-indigo {

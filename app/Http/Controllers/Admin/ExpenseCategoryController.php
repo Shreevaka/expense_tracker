@@ -35,7 +35,7 @@ class ExpenseCategoryController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.expense_category.create');
+        return redirect()->route('admin.expense-categories.index');
     }
 
     /**
@@ -66,15 +66,7 @@ class ExpenseCategoryController extends Controller
      */
     public function edit(string $id)
     {
-        try {
-
-            $category = ExpenseCategoryFacade::get($id);
-
-            return view('pages.admin.expense_category.edit', compact('category'));
-        } catch (Throwable $th) {
-
-            return redirect()->back()->with('error', 'Something went wrong');
-        }
+        return redirect()->route('admin.expense-categories.index');
     }
 
     /**
