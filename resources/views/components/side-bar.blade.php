@@ -153,7 +153,7 @@
         <li class="menu-label">Main Menu</li>
         
         <li class="menu-item">
-            <a href="#" class="menu-link {{ $activePage == 'dashboard' ? 'active' : '' }}">
+            <a href="{{ route('admin.dashboard') }}" class="menu-link {{ $activePage == 'dashboard' ? 'active' : '' }}">
                 <i class="fas fa-th-large"></i>
                 <span>Dashboard</span>
             </a>
@@ -169,16 +169,16 @@
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="fas fa-hand-holding-usd"></i>
-                <span>Income Category</span>
+            <a href="{{ route('admin.expense-categories.index') }}" class="menu-link {{ $activePage == 'expense_category' ? 'active' : '' }}">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Expense Category</span>
             </a>
         </li>
 
         <li class="menu-item">
             <a href="#" class="menu-link">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Expense Category</span>
+                <i class="fas fa-hand-holding-usd"></i>
+                <span>Income Category</span>
             </a>
         </li>
 

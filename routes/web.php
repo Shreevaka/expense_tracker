@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
+use App\Http\Controllers\Admin\ExpenseCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,20 +15,6 @@ use App\Http\Controllers\User\DashboardController as UserDashboardController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Route::middleware([
-//     'auth:sanctum',
-//     config('jetstream.auth_session'),
-//     'verified',
-// ])->group(function () {
-//     Route::get('/dashboard', function () {
-//         return view('dashboard');
-//     })->name('dashboard');
-// });
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -42,11 +29,12 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Route::resource('expense-categories', \App\Http\Controllers\Admin\ExpenseCategoryController::class);
+        Route::post('status-change-expense-category', [ExpenseCategoryController::class, 'updateExpenseCategoryStatus'])->name('update.expense.category.status');
 
+
+        Route::resource('expense-categories', ExpenseCategoryController::class);
         // Route::resource('income-categories', \App\Http\Controllers\Admin\IncomeCategoryController::class);
     });
-
 
 //User
 Route::middleware(['auth', 'role:user'])
