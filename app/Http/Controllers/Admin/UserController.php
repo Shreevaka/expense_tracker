@@ -18,7 +18,7 @@ class UserController extends Controller
 
             $users = UserFacade::allWithParamAndPaginate($request->all());
 
-            $allUsers = UserFacade::all();
+            $allUsers = UserFacade::allUsers();
             $totalCount = $allUsers->count();
             $activeCount = UserFacade::activeCount();
             $inactiveCount = UserFacade::deactiveCount();

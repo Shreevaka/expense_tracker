@@ -161,6 +161,7 @@
 
         <li class="menu-label">Management</li>
 
+        @role('admin')
         <li class="menu-item">
             <a href="{{ route('admin.users.index') }}" class="menu-link {{ $activePage == 'user' ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
@@ -181,6 +182,7 @@
                 <span>Income Category</span>
             </a>
         </li>
+        @endrole
 
         <li class="menu-label">System</li>
 
@@ -191,26 +193,32 @@
             </a>
         </li>
 
-        <!-- <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="fas fa-shield-alt"></i>
-                <span>Security</span>
-            </a>
-        </li> -->
     </ul>
 
     <div class="sidebar-footer">
         <div class="user-card">
-            <div class="user-avatar">
-                AD
+            <div class="user-avatar overflow-hidden rounded-circle">
+                <img src="{{ auth()->user()->image_url }}"
+                    alt="Profile"
+                    class="w-100 h-100 object-fit-cover">
             </div>
             <div class="user-info">
-                <span class="user-name">Admin User</span>
+                <span class="user-name">{{auth()->user()->name}}</span>
+                @role('admin')
                 <span class="user-role">Administrator</span>
+                @endrole
             </div>
-            <a href="#" class="logout-btn" title="Logout">
+            <a href="{{ route('logout') }}" 
+            class="logout-btn"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i>
             </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         </div>
     </div>
+
+    
 </aside>

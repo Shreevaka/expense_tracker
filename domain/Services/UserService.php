@@ -22,6 +22,10 @@ class UserService
     {
         return $this->user->all();
     }
+    public function allUsers()
+    {
+        return $this->user->role('user')->get();
+    }
 
     public function allWithParamAndPaginate($data, $limit = 10)
     {
@@ -42,12 +46,12 @@ class UserService
 
     public function activeCount()
     {
-        return $this->user->where('is_active', 1)->count();
+        return $this->user->role('user')->where('is_active', 1)->count();
     }
 
     public function deactiveCount()
     {
-        return $this->user->where('is_active', 0)->count();
+        return $this->user->role('user')->where('is_active', 0)->count();
     }
 
     public function first()
