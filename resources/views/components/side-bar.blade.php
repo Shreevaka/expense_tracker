@@ -176,7 +176,7 @@
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{ route('admin.income-categories.index') }}" class="menu-link {{ $activePage == 'income_category' ? 'active' : '' }}">
                 <i class="fas fa-hand-holding-usd"></i>
                 <span>Income Category</span>
             </a>

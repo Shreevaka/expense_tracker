@@ -1,12 +1,12 @@
-@extends('layouts.app', ['activePage' => 'expense_category', 'activeSection' => 'admin'])
+@extends('layouts.app', ['activePage' => 'income_category', 'activeSection' => 'admin'])
 
 @section('content')
 
 <!-- Page Header -->
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3 animate-up">
     <div>
-        <h1 class="h3 fw-bold mb-1 text-dark-gradient">Expense Categories</h1>
-        <p class="text-muted mb-0">Manage and organize expense categories and structures.</p>
+        <h1 class="h3 fw-bold mb-1 text-dark-gradient">Income Categories</h1>
+        <p class="text-muted mb-0">Manage and organize income categories and structures.</p>
     </div>
     <button type="button" class="btn btn-indigo shadow-indigo animate-hover-up" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
         <i class="fas fa-plus me-2"></i> Add Category
@@ -58,7 +58,7 @@
 <!-- Search and Filter Bar -->
 <div class="card border-0 shadow-sm rounded-4 mb-4 animate-up" style="animation-delay: 0.2s">
     <div class="card-body p-3">
-        <form method="GET" action="{{ route('admin.expense-categories.index') }}" class="row g-2 align-items-center">
+        <form method="GET" action="{{ route('admin.income-categories.index') }}" class="row g-2 align-items-center">
             <div class="col-12 col-md-8 col-lg-9">
                 <div class="search-input-group">
                     <i class="fas fa-search search-icon text-muted"></i>
@@ -70,7 +70,7 @@
                     Search
                 </button>
                 @if(request('sr'))
-                    <a href="{{ route('admin.expense-categories.index') }}" class="btn btn-outline-custom" title="Clear Search">
+                    <a href="{{ route('admin.income-categories.index') }}" class="btn btn-outline-custom" title="Clear Search">
                         <i class="fas fa-redo"></i>
                     </a>
                 @endif
@@ -166,7 +166,7 @@
                                         <i class="fas fa-folder-open text-muted fa-3x"></i>
                                     </div>
                                     <h5 class="fw-bold text-dark">No Categories Found</h5>
-                                    <p class="text-muted">Try refining your search or add a new expense category to get started.</p>
+                                    <p class="text-muted">Try refining your search or add a new income category to get started.</p>
                                     <button type="button" class="btn btn-indigo mt-2" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
                                         <i class="fas fa-plus me-1"></i> Add Category
                                     </button>
@@ -188,11 +188,11 @@
         <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header border-0 bg-light-soft py-3 px-4">
                 <h5 class="modal-title fw-bold text-dark" id="createCategoryModalLabel">
-                    <i class="fas fa-folder-plus text-primary me-2"></i>New Expense Category
+                    <i class="fas fa-folder-plus text-primary me-2"></i>New Income Category
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.expense-categories.store') }}" method="POST">
+            <form action="{{ route('admin.income-categories.store') }}" method="POST">
                 @csrf
                 <div class="modal-body p-4">
                     <div class="mb-3">
@@ -201,7 +201,7 @@
                     </div>
                     <div class="mb-0">
                         <label for="create_description" class="form-label fw-semibold text-muted">Description</label>
-                        <textarea class="form-control form-control-modern" id="create_description" name="description" rows="4" placeholder="Briefly describe what expenses fall under this category..."></textarea>
+                        <textarea class="form-control form-control-modern" id="create_description" name="description" rows="4" placeholder="Briefly describe what income fall under this category..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4 pt-0 d-flex gap-2 justify-content-end">
@@ -219,7 +219,7 @@
         <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header border-0 bg-light-soft py-3 px-4">
                 <h5 class="modal-title fw-bold text-dark" id="editCategoryModalLabel">
-                    <i class="fas fa-edit text-warning me-2"></i>Edit Expense Category
+                    <i class="fas fa-edit text-warning me-2"></i>Edit Income Category
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -317,7 +317,7 @@
             checkbox.prop('disabled', true);
 
             $.ajax({
-                url: "{{ route('admin.update.expense.category.status') }}",
+                url: "{{ route('admin.update.income.category.status') }}",
                 type: 'POST',
                 data: {
                     id: categoryId,
@@ -404,8 +404,8 @@
             $('#edit_name').val(name);
             $('#edit_description').val(desc);
 
-            // Construct update route URL: /admin/expense-categories/{id}
-            const updateUrl = "{{ route('admin.expense-categories.index') }}/" + id;
+            // Construct update route URL: /admin/income-categories/{id}
+            const updateUrl = "{{ route('admin.income-categories.index') }}/" + id;
             $('#editCategoryForm').attr('action', updateUrl);
 
             // Trigger Modal show
@@ -438,7 +438,7 @@
                 if (result.isConfirmed) {
                     // Send delete AJAX request
                     $.ajax({
-                        url: "{{ route('admin.expense-categories.index') }}/" + id,
+                        url: "{{ route('admin.income-categories.index') }}/" + id,
                         type: 'DELETE',
                         dataType: 'json',
                         success: function(response) {

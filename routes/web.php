@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\User\DashboardController as UserDashboardController;
 use App\Http\Controllers\Admin\ExpenseCategoryController;
+use App\Http\Controllers\Admin\IncomeCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,10 +31,11 @@ Route::middleware(['auth', 'role:admin'])
             ->name('dashboard');
 
         Route::post('status-change-expense-category', [ExpenseCategoryController::class, 'updateExpenseCategoryStatus'])->name('update.expense.category.status');
+        Route::post('status-change-income-category', [IncomeCategoryController::class, 'updateIncomeCategoryStatus'])->name('update.income.category.status');
 
 
         Route::resource('expense-categories', ExpenseCategoryController::class);
-        // Route::resource('income-categories', \App\Http\Controllers\Admin\IncomeCategoryController::class);
+        Route::resource('income-categories', IncomeCategoryController::class);
     });
 
 //User
