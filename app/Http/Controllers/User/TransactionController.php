@@ -87,23 +87,23 @@ class TransactionController extends Controller
             $exchangeRate = 1;
             $walletAmount = $request->amount;
 
-            // if ($walletCurrency != $requestCurrency) {
+            if ($walletCurrency != $requestCurrency) {
 
-                // $response = Http::get(
-                //     "http://api.exchangeratesapi.io/v1/latest",
-                //     [
-                //         'access_key' => Config::get('currency.exchange_rate_api_key'),
-                //         'base' => $requestCurrency, //EUR only available for free plan
-                //         'symbols' => $walletCurrency,
-                //     ]
-                // );
+                $response = Http::get(
+                    "http://api.exchangeratesapi.io/v1/latest",
+                    [
+                        'access_key' => Config::get('currency.exchange_rate_api_key'),
+                        'base' => $requestCurrency, //EUR only available for free plan
+                        'symbols' => $walletCurrency,
+                    ]
+                );
 
-                // $data = $response->json();
+                $data = $response->json();
 
-                // $exchangeRate = $data['rates'][$walletCurrency];
+                $exchangeRate = $data['rates'][$walletCurrency];
 
-                // $walletAmount = $request->amount * $exchangeRate;
-            // }
+                $walletAmount = $request->amount * $exchangeRate;
+            }
 
             $request->merge(['exchange_rate' => $exchangeRate, 'wallet_currency_amount' => $walletAmount]);
 
@@ -142,7 +142,81 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        DB::beginTransaction();
+        try {
+
+            $wallet = WalletFacade::get($request->wallet_id);
+            $transaction = TransactionFacade::get($id);
+
+            if (!$wallet) {
+                return redirect()->back()->with('error', 'You do not have access.');
+            }
+
+            if ($request->image) {
+                ImageFacade::delete($transaction->image_path);
+
+                $imagePath = ImageFacade::store($request->image, 'transactions');
+
+                $request->merge(['image_path' => $imagePath]);
+            }
+
+            $category = null;
+
+            if ($request->type == 'expense') {
+                $category = ExpenseCategoryFacade::get($request->category_id);
+
+            } elseif ($request->type == 'income') {
+                $category = IncomeCategoryFacade::get($request->category_id);
+            } else {
+                return redirect()->back()->with('error', 'Invalid category type.');
+            }
+
+            if (!$category) {
+                return redirect()->back()->with('error', 'Category not found.');
+            }
+
+            $walletCurrency = $wallet->currency;
+            $requestCurrency = $request->currency;
+            $exchangeRate = 1;
+            $walletAmount = $request->amount;
+
+            if ($walletCurrency != $requestCurrency) {
+
+                $response = Http::get(
+                    "http://api.exchangeratesapi.io/v1/latest",
+                    [
+                        'access_key' => Config::get('currency.exchange_rate_api_key'),
+                        'base' => $requestCurrency, //EUR only available for free plan
+                        'symbols' => $walletCurrency,
+                    ]
+                );
+
+                $data = $response->json();
+
+                $exchangeRate = $data['rates'][$walletCurrency];
+
+                $walletAmount = $request->amount * $exchangeRate;
+            }
+
+            $request->merge(['exchange_rate' => $exchangeRate, 'wallet_currency_amount' => $walletAmount]);
+
+            TransactionFacade::update($id, $request->all());
+
+            WalletFacade::updateWalletBalanceForDelete(
+                $transaction->wallet_id,
+                $transaction->category_group,
+                $transaction->wallet_currency_amount
+            );
+            WalletFacade::updateWalletBalance($wallet->id, $request->type, $walletAmount);
+
+            DB::commit();
+
+
+            return redirect()->route('user.transactions.index')->with('success', 'Transaction Updated Successfully');
+        } catch (Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     /**
@@ -163,16 +237,9 @@ class TransactionController extends Controller
                 ]);
             }
 
-            // determine type
-            if ($transaction->category_type == 'App\Models\IncomeCategory') {
-                $categoryType = 'income';
-            } else {
-                $categoryType = 'expense';
-            }
-
             WalletFacade::updateWalletBalanceForDelete(
                 $transaction->wallet_id,
-                $categoryType,
+                $transaction->category_group,
                 $transaction->wallet_currency_amount
             );
 
