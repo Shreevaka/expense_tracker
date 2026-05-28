@@ -113,6 +113,10 @@ class TransactionController extends Controller
 
             DB::commit();
 
+            if ($request->is_dashboard == 1) {
+                return redirect()->route('user.dashboard')->with('success', 'Transaction Added Successfully');
+            }
+
             return redirect()->route('user.transactions.index')->with('success', 'Transaction Added Successfully');
 
         } catch (Throwable $th) {

@@ -86,8 +86,7 @@
             <table class="table table-hover align-middle mb-0 text-nowrap">
                 <thead class="table-header-modern text-muted uppercase">
                     <tr>
-                        <th class="ps-4 py-3" style="width: 80px"></th>
-                        <th class="py-3">Category Name</th>
+                        <th class="ps-4 py-3">Category Name</th>
                         <th class="py-3">Description</th>
                         <th class="py-3" style="width: 150px">Status</th>
                         <th class="py-3" style="width: 180px">Created At</th>
@@ -98,12 +97,7 @@
                     @forelse($categories as $category)
                         <tr id="row-{{ $category->id }}" class="table-row-modern">
                             <td class="ps-4">
-                                <span class="badge rounded-pill bg-light text-primary border">
-                                    #{{ $categories->firstItem() + $loop->index }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="fw-bold text-dark fs-6">{{ $category->name }}</span>
+                                <span class="text-muted">{{ $category->name }}</span>
                             </td>
                             <td>
                                 <span class="text-muted d-inline-block text-truncate" style="max-width: 250px;" title="{{ $category->description }}">
@@ -160,7 +154,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center py-5">
+                            <td colspan="5" class="text-center py-5">
                                 <div class="py-4">
                                     <div class="empty-state-icon mb-3">
                                         <i class="fas fa-folder-open text-muted fa-3x"></i>

@@ -109,8 +109,7 @@
             <table class="table table-hover align-middle mb-0 text-nowrap">
                 <thead class="table-header-modern text-muted uppercase">
                     <tr>
-                        <th class="ps-4 py-3" style="width: 80px"></th>
-                        <th class="py-3">Transaction Title</th>
+                        <th class="ps-4 py-3">Transaction Title</th>
                         <th class="py-3">Wallet</th>
                         <th class="py-3">Category</th>
                         <th class="py-3">Amount</th>
@@ -123,13 +122,9 @@
                 <tbody>
                     @forelse($transactions as $transaction)
                         <tr id="row-{{ $transaction->id }}" class="table-row-modern">
+                        
                             <td class="ps-4">
-                                <span class="badge rounded-pill bg-light text-primary border">
-                                    #{{ $transactions->firstItem() + $loop->index }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="fw-bold text-dark fs-6">{{ $transaction->title }}</span>
+                                <span class="text-muted">{{ $transaction->title }}</span>
                             </td>
                             <td>
                                 <span class="text-muted">
@@ -212,7 +207,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center py-5">
+                            <td colspan="8" class="text-center py-5">
                                 <div class="py-4">
                                     <div class="empty-state-icon mb-3">
                                         <i class="fas fa-folder-open text-muted fa-3x"></i>
@@ -246,6 +241,9 @@
             </div>
             <form action="{{ route('user.transactions.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+
+                <input type="hidden" name="is_dashboard" value="0">
+
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label for="create_title" class="form-label fw-semibold text-muted">Transaction Title <span class="text-danger">*</span></label>

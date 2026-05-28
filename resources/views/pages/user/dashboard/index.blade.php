@@ -287,6 +287,9 @@
             </div>
             <form action="{{ route('user.transactions.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+
+                <input type="hidden" name="is_dashboard" value="1">
+
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label for="create_title" class="form-label fw-semibold text-muted">Transaction Title <span class="text-danger">*</span></label>
