@@ -106,6 +106,18 @@ class WalletService
         $wallet->save();
     }
 
+    public function updateWalletBalanceForDelete($walletId, $type = 'income', $amount)
+    {
+        $wallet = $this->get($walletId);
+
+        if ($type == 'income') {
+            $wallet->current_balance -= $amount;
+        } elseif ($type == 'expense') {
+            $wallet->current_balance += $amount;
+        }
+        $wallet->save();
+    }
+
 
     public function destroy($id)
     {

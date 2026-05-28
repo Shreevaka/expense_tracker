@@ -133,12 +133,12 @@
                             </td>
                             <td>
                                 <span class="text-muted">
-                                    {{ $transaction->category }}
+                                    {{ $transaction->wallet->name }}
                                 </span>
                             </td>
                             <td>
                                 <span class="text-muted">
-                                    {{ $transaction->wallet->name }}
+                                    {{ $transaction->category_group }}
                                 </span>
                             </td>
                             <td>
@@ -163,7 +163,27 @@
                             <td class="pe-4 text-center">
                                 <div class="d-flex justify-content-center gap-2">
                                     <!-- View Action -->
-                                    
+                                    <button class="btn btn-action btn-action-info view-transaction-btn" 
+                                            data-id="{{ $transaction->id }}"
+                                            data-title="{{ $transaction->title }}"
+                                            data-wallet="{{ $transaction->wallet->name }}"
+                                            data-wallet_currency="{{ $transaction->wallet->currency }}"
+                                            data-category_type="{{ $transaction->category_group }}"
+                                            data-category="{{ $transaction->category->name ?? 'N/A' }}"
+                                            data-description="{{ $transaction->description }}"
+                                            data-amount="{{ $transaction->amount }}"
+                                            data-currency="{{ $transaction->currency }}"
+                                            data-exchange_rate="{{ $transaction->exchange_rate }}"
+                                            data-wallet_currency_amount="{{ $transaction->wallet_currency_amount }}"
+                                            data-image="{{ $transaction->image_url }}"
+                                            data-transaction_date="{{ $transaction->transaction_date
+                                    ? \Carbon\Carbon::parse($transaction->transaction_date)->format('M d, Y')
+                                    : 'N/A' }}"
+                                            data-created="{{ $transaction->created_at ? $transaction->created_at->format('M d, Y h:i A') : 'N/A' }}"
+                                            data-updated="{{ $transaction->updated_at ? $transaction->updated_at->format('M d, Y h:i A') : 'N/A' }}"
+                                            title="View Details">
+                                        <i class="far fa-eye"></i>
+                                    </button>
 
                                     <!-- Edit Action -->
                                     <button class="btn btn-action btn-action-warning edit-transaction-btn" 
@@ -310,7 +330,105 @@
     </div>
 </div>
 
+<!-- View Details Modal -->
+<div class="modal fade" id="viewTransactionModal" tabindex="-1" aria-labelledby="viewTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
 
+            <!-- Header -->
+            <div class="modal-header bg-indigo text-white py-3 px-4">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-info-circle me-2"></i>Transaction Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-4">
+
+                <!-- Title -->
+                <div class="text-center mb-3">
+                    <h4 class="fw-bold text-dark mb-1" id="view_title">-</h4>
+                </div>
+
+                <div class="divider mb-4"></div>
+
+                <div class="row g-3">
+
+                    <div class="col-12">
+                        <label class="small text-muted fw-semibold">Description</label>
+                        <div class="p-3 bg-light rounded-3" id="view_description" style="white-space: pre-wrap;">
+                            -
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Wallet</label>
+                        <div class="text-dark fw-semibold" id="view_wallet">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Category</label>
+                        <div class="text-dark fw-semibold" id="view_category">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Type</label>
+                        <div id="view_category_type" class="fw-semibold">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Amount</label>
+                        <div class="fw-bold text-primary">
+                            <span id="view_currency"></span>
+                            <span id="view_amount"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Exchange Rate</label>
+                        <div id="view_exchange_rate">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Wallet Amount</label>
+                        <div class="fw-bold text-primary">
+                            <span id="view_wallet_currency"></span>
+                            <span id="view_wallet_currency_amount"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Transaction Date</label>
+                        <div id="view_transaction_date">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Created At</label>
+                        <div id="view_created_at">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="small text-muted fw-semibold">Updated At</label>
+                        <div id="view_updated_at">-</div>
+                    </div>
+                    
+                    <div class=" mt-4">
+                        <img id="view_image"
+                            src=""
+                            class="img-fluid rounded-3 shadow-sm"
+                            style="max-height: 180px; display:none;">
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 p-4 pt-0 d-flex justify-content-end">
+            </div>
+
+        </div>
+    </div>
+</div>
 @endsection
 
 
@@ -331,6 +449,55 @@
             }
         });
 
+        $('.view-transaction-btn').on('click', function() {
+            const btn = $(this);
+            const id = btn.data('id');
+            const title = btn.data('title');
+            const desc = btn.data('description') || 'No description provided for this transaction.';
+            const created = btn.data('created');
+            const updated = btn.data('updated');
+            const wallet = btn.data('wallet');
+            const category_type = btn.data('category_type');
+            const category = btn.data('category');
+            const amount = btn.data('amount');
+            const currency = btn.data('currency');
+            const exchange_rate = btn.data('exchange_rate');
+            const wallet_currency_amount = btn.data('wallet_currency_amount');
+            const image_url = btn.data('image');
+            const transaction_date = btn.data('transaction_date');
+            const wallet_currency = btn.data('wallet_currency');
+
+            // Populating visual elements
+            $('#view_id').text(id);
+            $('#view_title').text(title);
+            $('#view_description').text(desc);
+            $('#view_created_at').text(created);
+            $('#view_updated_at').text(updated);
+            $('#view_wallet').text(wallet);
+            $('#view_category_type').text(
+                    category_type.charAt(0).toUpperCase() + category_type.slice(1)
+                );
+            $('#view_category').text(category);
+            $('#view_amount').text(amount);
+            $('#view_currency').text(currency);
+            $('#view_exchange_rate').text(exchange_rate);
+            $('#view_wallet_currency_amount').text(wallet_currency_amount);
+            $('#view_transaction_date').text(transaction_date);
+            $('#view_wallet_currency').text(wallet_currency);
+
+            $('#view_image').hide();
+
+            if (image_url) {
+                $('#view_image')
+                    .attr('src', image_url)
+                    .show();
+            } else {
+                $('#view_image').hide();
+            }
+
+            // Trigger Modal show
+            $('#viewTransactionModal').modal('show');
+        });
 
         // 2. EDIT Wallet MODAL POPULATION
         $('.edit-wallet-btn').on('click', function() {
@@ -351,15 +518,14 @@
             $('#editWalletModal').modal('show');
         });
 
-        // 3. AJAX DELETE Wallet WITH SWEETALERT2
-        $('.delete-wallet-btn').on('click', function() {
+        $('.delete-transaction-btn').on('click', function() {
             const btn = $(this);
             const id = btn.data('id');
             const row = $(`#row-${id}`);
 
             Swal.fire({
-                title: 'Delete Wallet?',
-                text: "All associated transactions will lose their direct wallet! This action cannot be undone.",
+                title: 'Delete Transaction?',
+                text: "This action cannot be undone.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#4f46e5', // Theme indigo
@@ -377,7 +543,7 @@
                 if (result.isConfirmed) {
                     // Send delete AJAX request
                     $.ajax({
-                        url: "{{ route('user.wallets.index') }}/" + id,
+                        url: "{{ route('user.transactions.index') }}/" + id,
                         type: 'DELETE',
                         dataType: 'json',
                         success: function(response) {
@@ -399,13 +565,13 @@
                                         location.reload();
                                     }
                                 });
-                                toastr.success('Wallet has been deleted successfully.', 'Deleted!');
+                                toastr.success('Transaction has been deleted successfully.', 'Deleted!');
                             } else {
                                 toastr.error(response.message || 'Something went wrong', 'Failed!');
                             }
                         },
                         error: function(xhr) {
-                            toastr.error('Could not delete the wallet. Please try again.', 'Error!');
+                            toastr.error('Could not delete the transaction. Please try again.', 'Error!');
                         }
                     });
                 }

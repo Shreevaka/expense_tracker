@@ -70,16 +70,16 @@
                     @forelse($transactions as $transaction)
                         <tr id="row-{{ $wallet->id }}" class="table-row-modern">
                             <td class="ps-4">
-                                <span class="badge rounded-pill bg-light text-primary border">
-                                    #{{ $transaction->firstItem() + $loop->index }}
-                                </span>
+                                {{-- <span class="badge rounded-pill bg-light text-primary border">
+                                    
+                                </span> --}}
                             </td>
                             <td>
-                                <span class="fw-bold text-dark fs-6">{{ $wallet->title }}</span>
+                                <span class="fw-bold text-dark fs-6">{{ $transaction->title }}</span>
                             </td>
                             <td>
                                 <span class="text-muted">
-                                    {{ $transaction->category }}
+                                    {{ $transaction->category_group }}
                                 </span>
                             </td>
                             <td>

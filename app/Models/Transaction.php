@@ -12,7 +12,7 @@ class Transaction extends Model
     protected $fillable = ['user_id', 'wallet_id', 'category_id', 'category_type', 'title', 'description', 'amount', 'currency', 'exchange_rate', 'wallet_currency_amount', 'transaction_date', 'image_path'];
 
     protected $appends = [
-        'category',
+        'category_group',
         'image_url',
     ];
 
@@ -31,7 +31,7 @@ class Transaction extends Model
         return $this->belongsTo(Wallet::class);
     }
 
-    public function getCategoryAttribute()
+    public function getCategoryGroupAttribute()
     {
         $category = null;
 

@@ -78,6 +78,8 @@ class WalletController extends Controller
         $totalExpense = TransactionFacade::userTotalAmountInWalletByCategory($id, 'expense');
         $transactions = TransactionFacade::walletTransactionWithPaginate($id);
 
+        // dd($transactions);
+
         return view('pages.user.wallet.show', compact('wallet','totalCount','totalExpense','transactions'));
     }
 

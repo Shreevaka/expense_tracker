@@ -150,7 +150,50 @@ class TransactionController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+
+            $transaction = TransactionFacade::get($id);
+
+            if (!$transaction) {
+                return json_encode([
+                    'response' => 'error',
+                    'message' => 'Transaction not found!'
+                ]);
+            }
+
+            // determine type
+            if ($transaction->category_type == 'App\Models\IncomeCategory') {
+                $categoryType = 'income';
+            } else {
+                $categoryType = 'expense';
+            }
+
+            WalletFacade::updateWalletBalanceForDelete(
+                $transaction->wallet_id,
+                $categoryType,
+                $transaction->wallet_currency_amount
+            );
+
+            TransactionFacade::destroy($id);
+
+            DB::commit();
+
+            return json_encode([
+                'response' => 'success',
+                'message' => 'Transaction Deleted Successfully!'
+            ]);
+
+        } catch (Throwable $th) {
+
+            DB::rollBack();
+
+            return json_encode([
+                'response' => 'error',
+                'message' => 'Something went wrong'
+            ]);
+        }
     }
 
     public function getCategoryByType(Request $request)
