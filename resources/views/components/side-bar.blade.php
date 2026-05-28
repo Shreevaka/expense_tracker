@@ -172,7 +172,7 @@
         </li>
         <li class="menu-item">
             <a href="{{ route('user.transactions.index') }}" class="menu-link {{ $activePage == 'transaction' ? 'active' : '' }}">
-                <i class="fas fa-wallet"></i>
+                <i class="fas fa-exchange-alt"></i>
                 <span>Transactions</span>
             </a>
         </li>
@@ -201,23 +201,21 @@
         </li>
         @endrole
 
-        <li class="menu-label">System</li>
+        {{-- <li class="menu-label">System</li>
 
         <li class="menu-item">
             <a href="#" class="menu-link">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
             </a>
-        </li>
+        </li> --}}
 
     </ul>
 
     <div class="sidebar-footer">
         <div class="user-card">
-            <div class="user-avatar overflow-hidden rounded-circle">
-                <img src="{{ auth()->user()->image_url }}"
-                    alt="Profile"
-                    class="w-100 h-100 object-fit-cover">
+            <div class="user-avatar">
+                {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
             </div>
             <div class="user-info">
                 <span class="user-name">{{auth()->user()->name}}</span>

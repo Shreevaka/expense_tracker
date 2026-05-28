@@ -88,18 +88,14 @@
         padding-right: 1.5rem;
         border-right: 1px solid #e2e8f0;
     }
+
+    .nav-actions > div:last-child {
+        border-right: none;
+    }
 </style>
 
 <nav class="navbar-custom">
     <div class="d-flex align-items-center">
-        <!-- <button class="btn btn-light d-lg-none me-3" id="sidebarToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <div class="search-wrapper d-none d-md-block">
-            <i class="fas fa-search"></i>
-            <input type="text" class="search-input" placeholder="Search invoices, clients, or reports...">
-        </div> -->
     </div>
 
     <div class="nav-actions">
@@ -108,18 +104,5 @@
             <i class="far fa-calendar-alt me-2"></i>
             {{ date('l, F j, Y') }}
         </div>
-
-        <a href="#" class="nav-btn">
-            <i class="far fa-bell"></i>
-            <span class="badge-notif">3</span>
-        </a>
-
-        <!-- <a href="#" class="nav-btn">
-            <i class="far fa-envelope"></i>
-        </a>
-
-        <a href="#" class="nav-btn">
-            <i class="fas fa-cog"></i>
-        </a> -->
     </div>
 </nav>

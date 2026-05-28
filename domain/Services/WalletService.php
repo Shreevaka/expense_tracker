@@ -23,6 +23,11 @@ class WalletService
         return $this->wallet->where('user_id', auth()->id())->get();
     }
 
+    public function recentWallet()
+    {
+        return $this->wallet->where('user_id', auth()->id())->latest('updated_at')->first();
+    }
+
     public function allWithParamAndPaginate($data, $limit = 10)
     {
         if($data && array_key_exists('sr', $data)){

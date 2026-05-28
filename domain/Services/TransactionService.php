@@ -4,6 +4,7 @@ namespace domain\Services;
 
 use App\Models\Transaction;
 use App\Models\Wallet;
+use Carbon\Carbon;
 
 class TransactionService
 {
@@ -92,7 +93,7 @@ class TransactionService
         $this->get($id)->delete();
     }
 
-    public function userTotalAmountInWalletByCategory($walletId, $category = 'expense')
+    public function userTotalAmountInWalletByCategory($walletId, $category = 'expense', $month = null)
     {
         if ($category == 'expense') {
             $categoryType = 'App\Models\ExpenseCategory';
@@ -108,6 +109,14 @@ class TransactionService
 
         if ($walletId != 0) {
             $query->where('wallet_id', $walletId);
+        }
+
+        if (!empty($month)) {
+
+            $date = Carbon::createFromFormat('Y-m', $month);
+
+            $query->whereYear('transaction_date', $date->year)
+                ->whereMonth('transaction_date', $date->month);
         }
 
         return $query->sum('wallet_currency_amount');
