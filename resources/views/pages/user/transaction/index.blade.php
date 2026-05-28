@@ -151,13 +151,11 @@
                                     {{ $transaction->currency}}
                                 </span>
                             </td>
-                            <td>
-                                <span class="text-muted">
-                                    {{ $transaction->current_balance}}
-                                </span>
-                            </td>
                             <td class="text-muted">
-                                <i class="far fa-calendar-alt me-1"></i> {{ $transaction->transaction_date ? $transaction->transaction_date->format('M d, Y') : 'N/A' }}
+                                <i class="far fa-calendar-alt me-1"></i>
+                                {{ $transaction->transaction_date
+                                    ? \Carbon\Carbon::parse($transaction->transaction_date)->format('M d, Y')
+                                    : 'N/A' }}
                             </td>
                             <td class="text-muted">
                                 <i class="far fa-calendar-alt me-1"></i> {{ $transaction->created_at ? $transaction->created_at->format('M d, Y') : 'N/A' }}

@@ -12,6 +12,8 @@ use domain\Facades\IncomeCategoryFacade;
 use domain\Facades\ImageFacade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -28,7 +30,7 @@ class TransactionController extends Controller
             $totalCount = $alltransactions->count();
             $totalExpenseAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'expense');
             $totalIncomeAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'income');
-            $currencies = Config::get('currency');
+            $currencies = Config::get('currency.currency_list_for_api');
             $wallets = WalletFacade::all();
 
             return view('pages.user.transaction.index', compact('transactions','totalCount','totalExpenseAmount','totalIncomeAmount','currencies','wallets'));
@@ -50,7 +52,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        DB::beginTransaction();
         try {
 
             $wallet = WalletFacade::get($request->wallet_id);
@@ -80,12 +82,42 @@ class TransactionController extends Controller
                 return redirect()->back()->with('error', 'Category not found.');
             }
 
+            $walletCurrency = $wallet->currency;
+            $requestCurrency = $request->currency;
+            $exchangeRate = 1;
+            $walletAmount = $request->amount;
+
+            // if ($walletCurrency != $requestCurrency) {
+
+                // $response = Http::get(
+                //     "http://api.exchangeratesapi.io/v1/latest",
+                //     [
+                //         'access_key' => Config::get('currency.exchange_rate_api_key'),
+                //         'base' => $requestCurrency, //EUR only available for free plan
+                //         'symbols' => $walletCurrency,
+                //     ]
+                // );
+
+                // $data = $response->json();
+
+                // $exchangeRate = $data['rates'][$walletCurrency];
+
+                // $walletAmount = $request->amount * $exchangeRate;
+            // }
+
+            $request->merge(['exchange_rate' => $exchangeRate, 'wallet_currency_amount' => $walletAmount]);
+
             TransactionFacade::store($request->all());
+
+            WalletFacade::updateWalletBalance($wallet->id, $request->type, $walletAmount);
+
+            DB::commit();
 
             return redirect()->route('user.transactions.index')->with('success', 'Transaction Added Successfully');
 
         } catch (Throwable $th) {
-            return redirect()->back()->with('error', 'Something went wrong');
+            DB::rollBack();
+            return redirect()->back()->with('error', $th);
         }
     }
 

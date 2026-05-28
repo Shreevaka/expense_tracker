@@ -24,7 +24,7 @@ class WalletController extends Controller
             $totalCount = $allWallets->count();
             $activeCount = WalletFacade::activeCount();
             $totalBalance = WalletFacade::totalBalance();
-            $currencies = Config::get('currency');
+            $currencies = Config::get('currency.currency_list');
 
             return view('pages.user.wallet.index', compact('wallets','totalCount','activeCount','totalBalance','currencies'));
         } catch (Throwable $th) {
