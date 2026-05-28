@@ -195,12 +195,12 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.income-categories.store') }}" method="POST">
+            <form action="{{ route('admin.income-categories.store') }}" method="POST" id="create-income-form">
                 @csrf
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label for="create_name" class="form-label fw-semibold text-muted">Category Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-modern" id="create_name" name="name" placeholder="e.g., Marketing, Office Supplies" required>
+                        <input type="text" class="form-control form-control-modern" id="create_name" name="name" placeholder="e.g., Marketing, Office Supplies" >
                     </div>
                     <div class="mb-0">
                         <label for="create_description" class="form-label fw-semibold text-muted">Description</label>
@@ -232,7 +232,7 @@
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label for="edit_name" class="form-label fw-semibold text-muted">Category Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-modern" id="edit_name" name="name" required placeholder="e.g. Travel, Utilities">
+                        <input type="text" class="form-control form-control-modern" id="edit_name" name="name" required placeholder="e.g. Travel, Utilities" requireds>
                     </div>
                     <div class="mb-0">
                         <label for="edit_description" class="form-label fw-semibold text-muted">Description</label>
@@ -476,5 +476,8 @@
             });
         });
     });
+
 </script>
+    {!! JsValidator::formRequest('App\Http\Requests\StoreIncomeCategoryRequest', '#create-income-form') !!}
+    {!! JsValidator::formRequest('App\Http\Requests\StoreIncomeCategoryRequest', '#editCategoryForm') !!}
 @endpush

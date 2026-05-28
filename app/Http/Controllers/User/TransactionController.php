@@ -184,23 +184,23 @@ class TransactionController extends Controller
             $exchangeRate = 1;
             $walletAmount = $request->amount;
 
-            // if ($walletCurrency != $requestCurrency) {
+            if ($walletCurrency != $requestCurrency) {
 
-            //     $response = Http::get(
-            //         "http://api.exchangeratesapi.io/v1/latest",
-            //         [
-            //             'access_key' => Config::get('currency.exchange_rate_api_key'),
-            //             'base' => $requestCurrency, //EUR only available for free plan
-            //             'symbols' => $walletCurrency,
-            //         ]
-            //     );
+                $response = Http::get(
+                    "http://api.exchangeratesapi.io/v1/latest",
+                    [
+                        'access_key' => Config::get('currency.exchange_rate_api_key'),
+                        'base' => $requestCurrency, //EUR only available for free plan
+                        'symbols' => $walletCurrency,
+                    ]
+                );
 
-            //     $data = $response->json();
+                $data = $response->json();
 
-            //     $exchangeRate = $data['rates'][$walletCurrency];
+                $exchangeRate = $data['rates'][$walletCurrency];
 
-            //     $walletAmount = $request->amount * $exchangeRate;
-            // }
+                $walletAmount = $request->amount * $exchangeRate;
+            }
 
             $request->merge(['exchange_rate' => $exchangeRate, 'wallet_currency_amount' => $walletAmount]);
 

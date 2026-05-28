@@ -194,7 +194,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.expense-categories.store') }}" method="POST">
+            <form action="{{ route('admin.expense-categories.store') }}" method="POST" id="create-expense-form">
                 @csrf
                 <div class="modal-body p-4">
                     <div class="mb-3">
@@ -476,4 +476,6 @@
         });
     });
 </script>
+{!! JsValidator::formRequest('App\Http\Requests\StoreExpenseCategoryRequest', '#create-expense-form') !!}
+{!! JsValidator::formRequest('App\Http\Requests\StoreExpenseCategoryRequest', '#editCategoryForm') !!}
 @endpush
