@@ -190,6 +190,13 @@
                                             data-id="{{ $transaction->id }}"
                                             data-title="{{ $transaction->title }}"
                                             data-description="{{ $transaction->description }}"
+                                            data-wallet_id="{{ $transaction->wallet_id }}"
+                                            data-type="{{ $transaction->category_group }}"
+                                            data-category_id="{{ $transaction->category_id}}"
+                                            data-amount="{{ $transaction->amount }}"
+                                            data-currency="{{ $transaction->currency }}"
+                                            data-image="{{ $transaction->image_url }}"
+                                            data-transaction_date="{{ $transaction->transaction_date }}"
                                             title="Edit Transaction">
                                         <i class="far fa-edit"></i>
                                     </button>
@@ -229,7 +236,7 @@
 
 <!-- Create Transaction Modal -->
 <div class="modal fade" id="createTransactionModal" tabindex="-1" aria-labelledby="createTransactionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 shadow-lg rounded-4">
             <div class="modal-header border-0 bg-light-soft py-3 px-4">
                 <h5 class="modal-title fw-bold text-dark" id="createTransactionModalLabel">
@@ -429,6 +436,146 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editTransactionModal" tabindex="-1" aria-labelledby="editTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <!-- Header -->
+            <div class="modal-header border-0 bg-light-soft py-3 px-4">
+                <h5 class="modal-title fw-bold text-dark" id="editTransactionModalLabel">
+                    <i class="fas fa-edit text-warning me-2"></i>Edit Transaction
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Form -->
+            <form id="editTransactionForm" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                <div class="modal-body p-4">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Transaction Title <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="edit_title"
+                               name="title"
+                               class="form-control form-control-modern"
+                               placeholder="e.g. Travel, Food">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Wallet <span class="text-danger">*</span>
+                        </label>
+                        <select id="edit_wallet_id"
+                                name="wallet_id"
+                                class="form-control form-control-modern">
+                            @foreach($wallets as $wallet)
+                                <option value="{{ $wallet->id }}">{{ $wallet->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Type <span class="text-danger">*</span>
+                        </label>
+                        <select id="edit_type"
+                                name="type"
+                                class="form-control form-control-modern">
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Category <span class="text-danger">*</span>
+                        </label>
+                        <select id="edit_category_id"
+                                name="category_id"
+                                class="form-control form-control-modern">
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Transaction Date <span class="text-danger">*</span>
+                        </label>
+                        <input type="date"
+                               id="edit_transaction_date"
+                               name="transaction_date"
+                               class="form-control form-control-modern">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Currency <span class="text-danger">*</span>
+                        </label>
+                        <select id="edit_currency"
+                                name="currency"
+                                class="form-control form-control-modern">
+                            @foreach($currencies as $currency)
+                                <option value="{{ $currency }}">{{ $currency }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Amount <span class="text-danger">*</span>
+                        </label>
+                        <input type="number"
+                               step="0.01"
+                               id="edit_amount"
+                               name="amount"
+                               class="form-control form-control-modern"
+                               placeholder="0.00">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-muted">
+                            Description
+                        </label>
+                        <textarea id="edit_description"
+                                  name="description"
+                                  rows="4"
+                                  class="form-control form-control-modern"
+                                  placeholder="Update description..."></textarea>
+                    </div>
+
+                    <label for="preview" id="curent-image" class="form-label fw-semibold text-muted">Current Image</label>
+                    <div class="mb-2">
+                        <img id="edit_image_preview"
+                            src=""
+                            class="img-fluid rounded shadow-sm"
+                            style="max-height:120px; display:none;">
+                    </div>
+
+                    <label for="image" class="form-label fw-semibold text-muted">Image</label>
+                    <input type="file" name="image" class="form-control edit-transaction-image">
+
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer border-0 p-4 pt-0 d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-indigo px-4">
+                        Update Transaction
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
 @endsection
 
 
@@ -441,6 +588,7 @@
     $(document).ready(function() {
         
         $('.transaction-image').dropify();
+        $('.edit-transaction-image').dropify();
 
         // CSRF Token setup for AJAX requests
         $.ajaxSetup({
@@ -499,24 +647,48 @@
             $('#viewTransactionModal').modal('show');
         });
 
-        // 2. EDIT Wallet MODAL POPULATION
-        $('.edit-wallet-btn').on('click', function() {
+        $('.edit-transaction-btn').on('click', function() {
             const btn = $(this);
             const id = btn.data('id');
-            const name = btn.data('name');
-            const desc = btn.data('description');
+            const title = btn.data('title');
+            const description = btn.data('description');
+            const wallet_id = btn.data('wallet_id');
+            const type = btn.data('type');
+            const category_id = btn.data('category_id');
+            const amount = btn.data('amount');
+            const currency = btn.data('currency');
+            const transaction_date = btn.data('transaction_date');
+            const edit_image = btn.data('image');
 
-            // Populate form fields
-            $('#edit_name').val(name);
-            $('#edit_description').val(desc);
+            $('#edit_title').val(title);
+            $('#edit_description').val(description);
+            $('#edit_wallet_id').val(wallet_id);
+            $('#edit_type').val(type);
+            $('#edit_amount').val(amount);
+            $('#edit_currency').val(currency);
+            $('#edit_transaction_date').val(transaction_date);
+            $('#edit_category_id').val(category_id);
 
-            // Construct update route URL: /user/wallets/{id}
-            const updateUrl = "{{ route('user.wallets.index') }}/" + id;
-            $('#editWalletForm').attr('action', updateUrl);
+            if (edit_image) {
+                $('#edit_image_preview')
+                    .attr('src', edit_image)
+                    .show();
+                $('#curent-image').show();
+            } else {
+                $('#edit_image_preview').hide();
+                $('#curent-image').hide();
+            }
+        
+            // dynamic form action
+            const updateUrl = "{{ route('user.transactions.index') }}/" + id;
+            $('#editTransactionForm').attr('action', updateUrl);
 
-            // Trigger Modal show
-            $('#editWalletModal').modal('show');
+            // load categories based on type
+            loadCategories(type, category_id);
+
+            $('#editTransactionModal').modal('show');
         });
+
 
         $('.delete-transaction-btn').on('click', function() {
             const btn = $(this);
@@ -601,5 +773,38 @@
             }
         });
     });
+
+    $('#edit_type').on('change', function () {
+
+        let type = $(this).val();
+
+        loadCategories(type);
+    });
+
+    function loadCategories(type, selectedId = null) {
+
+        $('#edit_category_id').html('<option value="">Loading...</option>');
+
+        $.ajax({
+            url: '/transactions/categories-by-type',
+            type: 'GET',
+            data: { type: type },
+
+            success: function (data) {
+
+                let options = '<option value="">Select Category</option>';
+
+                $.each(data, function (key, value) {
+
+                    options += `<option value="${value.id}" ${value.id == selectedId ? 'selected' : ''}>
+                                    ${value.name}
+                                </option>`;
+                });
+
+                $('#edit_category_id').html(options);
+            },
+
+        });
+    }
 </script>
 @endpush
