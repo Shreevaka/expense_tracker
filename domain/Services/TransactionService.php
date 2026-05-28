@@ -85,6 +85,14 @@ class TransactionService
 
     public function update($id, $data)
     {
+        if ($data['type'] == 'expense') {
+            $categoryType = 'App\Models\ExpenseCategory';
+        } elseif ($data['type'] == 'income') {
+            $categoryType = 'App\Models\IncomeCategory';
+        }
+
+        $data['category_type'] = $categoryType;
+
         $this->get($id)->update($data);
     }
 

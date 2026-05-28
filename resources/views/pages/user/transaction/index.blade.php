@@ -254,7 +254,7 @@
                             Wallet <span class="text-danger">*</span>
                         </label>
 
-                        <select name="wallet_id" class="form-control form-control-modern" required>
+                        <select name="wallet_id" id="wallet" class="form-control form-control-modern" required>
                             <option value="">Select Wallet</option>
                             @foreach($wallets as $wallet)
                                 <option value="{{ $wallet->id }}">{{ $wallet->name }}</option>
@@ -298,7 +298,7 @@
                             Currency <span class="text-danger">*</span>
                         </label>
 
-                        <select name="currency" class="form-control form-control-modern" required>
+                        <select name="currency" id="currency" class="form-control form-control-modern" required>
                             <option value="">Select Currency</option>
                             @foreach($currencies as $currency)
                                 <option value="{{ $currency }}">{{ $currency }}</option>
@@ -660,10 +660,10 @@
 
             $('#edit_title').val(title);
             $('#edit_description').val(description);
-            $('#edit_wallet_id').val(wallet_id);
-            $('#edit_type').val(type);
+            $('#edit_wallet_id').val(wallet_id).trigger('change');
+            $('#edit_type').val(type).trigger('change');
             $('#edit_amount').val(amount);
-            $('#edit_currency').val(currency);
+            $('#edit_currency').val(currency).trigger('change');
             $('#edit_transaction_date').val(transaction_date);
             $('#edit_category_id').val(category_id);
 
@@ -746,6 +746,47 @@
                     });
                 }
             });
+        });
+
+        $('#wallet').select2({
+            placeholder: 'Select Wallet',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
+        });
+        $('#type').select2({
+            placeholder: 'Select Type',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
+        });
+        $('#category_id').select2({
+            placeholder: 'Select Category',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
+        });
+        $('#currency').select2({
+            placeholder: 'Select Currency',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
+        });
+        $('#edit_wallet_id').select2({
+            placeholder: 'Select Wallet',
+            dropdownParent: $('#editTransactionModal'),
+            width:'100%'
+        });
+        $('#edit_type').select2({
+            placeholder: 'Select Type',
+            dropdownParent: $('#editTransactionModal'),
+            width:'100%'
+        });
+        $('#edit_category_id').select2({
+            placeholder: 'Select Category',
+            dropdownParent: $('#editTransactionModal'),
+            width:'100%'
+        });
+        $('#edit_currency').select2({
+            placeholder: 'Select Currency',
+            dropdownParent: $('#editTransactionModal'),
+            width:'100%'
         });
     });
 

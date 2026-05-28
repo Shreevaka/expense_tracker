@@ -417,3 +417,26 @@ body {
     font-size: 16px !important; /* Adjust the font size */
     color: #a3a3a3 !important; /* Adjust the color if needed */
 }
+
+.select2-container--default .select2-selection--single {
+    height: 40px !important; /* match bootstrap input height */
+    border: 1px solid #ced4da !important;
+    border-radius: 8px !important; /* match your form-control-modern */
+    display: flex !important;
+    align-items: center !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 40px !important;
+    padding-left: 12px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px !important;
+    right: 8px !important;
+}
+
+.select2-container--focus .select2-selection--single {
+    border-color: #86b7fe; /* bootstrap focus color */
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+}

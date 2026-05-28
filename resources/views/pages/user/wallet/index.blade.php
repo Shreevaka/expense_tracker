@@ -152,11 +152,19 @@
                                     </button>
 
                                     <!-- Delete Action -->
-                                    <button class="btn btn-action btn-action-danger delete-wallet-btn" 
-                                            data-id="{{ $wallet->id }}" 
-                                            title="Delete Wallet">
-                                        <i class="far fa-trash-alt"></i>
-                                    </button>
+                                    @if($wallet->transactions->count() > 0)
+                                        <button class="btn btn-action btn-action-danger delete-wallet-btn" 
+                                                data-id="{{ $wallet->id }}" 
+                                                title="Delete Wallet" disabled >
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    @else
+                                        <button class="btn btn-action btn-action-danger delete-wallet-btn" 
+                                                data-id="{{ $wallet->id }}" 
+                                                title="Delete Wallet">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -278,7 +286,6 @@
 @push('custom_scripts')
 <script type="text/javascript">
     $(document).ready(function() {
-        
         // CSRF Token setup for AJAX requests
         $.ajaxSetup({
             headers: {
@@ -425,10 +432,11 @@
             });
         });
 
-        // $('#currency').select2({
-        //     placeholder: "Select Currency",
-        //     width: '100'
-        // });
+        $('#currency').select2({
+            placeholder: 'Select Currency',
+            dropdownParent: $('#createWalletModal'),
+            width:'100%'
+        });
     });
 </script>
 @endpush

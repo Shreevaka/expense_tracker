@@ -145,11 +145,19 @@
                                     </button>
 
                                     <!-- Delete Action -->
-                                    <button class="btn btn-action btn-action-danger delete-category-btn" 
-                                            data-id="{{ $category->id }}" 
-                                            title="Delete Category">
-                                        <i class="far fa-trash-alt"></i>
-                                    </button>
+                                    @if($category->transactions->count() > 0)
+                                        <button class="btn btn-action btn-action-danger delete-category-btn" 
+                                                data-id="{{ $category->id }}" 
+                                                title="Delete Category" disabled>
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    @else
+                                        <button class="btn btn-action btn-action-danger delete-category-btn" 
+                                                data-id="{{ $category->id }}" 
+                                                title="Delete Category">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
