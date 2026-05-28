@@ -120,6 +120,14 @@
         animation: pulse 2s infinite ease-in-out;
         display: inline-block;
     }
+
+    .hover-scale {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hover-scale:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
 </style>
 @endpush
 @section('content')
@@ -193,11 +201,46 @@
 
 <div class="row g-4">
     <div class="col-12 col-lg-8">
+        @if(!empty($expenseCategories) && $expenseCategories->count() > 0)
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0 text-dark">
+                            <i class="fas fa-chart-pie me-2 text-indigo"></i>Expense Category Usage
+                        </h5>
+                        <span class="badge bg-indigo-soft text-indigo fw-semibold px-2.5 py-1" style="font-size: 0.75rem;">Times Used</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2.5">
+                        @foreach($expenseCategories as $category)
+                            @php
+                                $count = $category->transactions_count ?? 0;
+                                $badgeClass = 'bg-light text-secondary border';
+                                if ($count > 15) {
+                                    $badgeClass = 'bg-primary-soft text-primary border border-primary-subtle';
+                                } elseif ($count > 8) {
+                                    $badgeClass = 'bg-info-soft text-info border border-info-subtle';
+                                } elseif ($count > 0) {
+                                    $badgeClass = 'bg-success-soft text-success border border-success-subtle';
+                                }
+                            @endphp
+                            <div class="d-inline-flex align-items-center gap-2 px-3 py-2 mx-1 rounded-pill hover-scale transition-all {{ $badgeClass }}" style="font-size: 0.825rem; font-weight: 600; cursor: default;">
+                                <span>{{ $category->name }}</span>
+                                <span class="badge rounded-pill bg-white text-dark font-monospace">
+                                    {{ $count }}
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="card border-0 shadow-sm rounded-4">
             <div class="card-header bg-white border-bottom-0 pt-4 px-4 mb-2 d-flex justify-content-between align-items-center">
                 <h5 class="fw-bold mb-0">Recent Transactions</h5>
                 <a href="{{ route('user.transactions.index') }}" class="btn btn-sm btn-indigo fw-semibold px-2 py-1">View All</a>
             </div>
+
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">

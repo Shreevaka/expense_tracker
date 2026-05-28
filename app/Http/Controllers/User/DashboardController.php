@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Throwable;
 use domain\Facades\WalletFacade;
 use domain\Facades\TransactionFacade;
+use domain\Facades\ExpenseCategoryFacade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
@@ -47,7 +48,9 @@ class DashboardController extends Controller
                 $coins = $data;
             }
 
-            return view('pages.user.dashboard.index', compact('transactions','currencies','wallets','recentWalletId','totalExpenseAmount','totalIncomeAmount','totalCount','totalWalletCount','coins'));
+            $expenseCategories = ExpenseCategoryFacade::allActiveWithUserCount();
+
+            return view('pages.user.dashboard.index', compact('transactions','currencies','wallets','recentWalletId','totalExpenseAmount','totalIncomeAmount','totalCount','totalWalletCount','coins', 'expenseCategories'));
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Something went wrong');
         }

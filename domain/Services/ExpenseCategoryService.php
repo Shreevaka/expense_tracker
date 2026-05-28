@@ -37,6 +37,16 @@ class ExpenseCategoryService
         return $this->expenseCategory->where('is_active', 1)->get();
     }
 
+    public function allActiveWithUserCount()
+    {
+        return $this->expenseCategory->where('is_active', 1)
+            ->withCount(['transactions' => function ($query) {
+                $query->where('user_id', auth()->id());
+            }])
+            ->orderByDesc('transactions_count')
+            ->get();
+    }
+
     public function activeCount()
     {
         return $this->expenseCategory->where('is_active', 1)->count();
