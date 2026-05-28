@@ -57,6 +57,15 @@ class WalletService
         return $this->wallet->where('user_id', auth()->id())->first();
     }
 
+    public function userWalletByWalletId($walletId)
+    {
+        $wallet = $this->wallet->where('id', $data['wallet_id'])
+            ->where('user_id', auth()->id())
+            ->first();
+
+        return $wallet;
+    }
+
     /**
      * get
      *

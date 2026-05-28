@@ -1,0 +1,138 @@
+<?php
+
+namespace App\Http\Controllers\User;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Throwable;
+use domain\Facades\WalletFacade;
+use domain\Facades\TransactionFacade;
+use domain\Facades\ExpenseCategoryFacade;
+use domain\Facades\IncomeCategoryFacade;
+use domain\Facades\ImageFacade;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log; 
+
+class TransactionController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        try {
+
+            $transactions = TransactionFacade::allWithParamAndPaginate($request->all());
+
+            $alltransactions = TransactionFacade::all();
+            $totalCount = $alltransactions->count();
+            $totalExpenseAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'expense');
+            $totalIncomeAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'income');
+            $currencies = Config::get('currency');
+            $wallets = WalletFacade::all();
+
+            return view('pages.user.transaction.index', compact('transactions','totalCount','totalExpenseAmount','totalIncomeAmount','currencies','wallets'));
+        } catch (Throwable $th) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        dd($request->all());
+        try {
+
+            $wallet = WalletFacade::get($request->wallet_id);
+
+            if (!$wallet) {
+                return redirect()->back()->with('error', 'You do not have access.');
+            }
+
+            if ($request->image) {
+                $imagePath = ImageFacade::store($request->image, 'transactions');
+
+                $request->merge(['image_path' => $imagePath]);
+            }
+
+            $category = null;
+
+            if ($request->type == 'expense') {
+                $category = ExpenseCategoryFacade::get($request->category_id);
+
+            } elseif ($request->type == 'income') {
+                $category = IncomeCategoryFacade::get($request->category_id);
+            } else {
+                return redirect()->back()->with('error', 'Invalid category type.');
+            }
+
+            if (!$category) {
+                return redirect()->back()->with('error', 'Category not found.');
+            }
+
+            TransactionFacade::store($request->all());
+
+            return redirect()->route('user.transactions.index')->with('success', 'Transaction Added Successfully');
+
+        } catch (Throwable $th) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+
+    public function getCategoryByType(Request $request)
+    {
+        if ($request->type == 'expense') {
+            $categories = ExpenseCategoryFacade::allActive();
+            return $categories;
+        }
+
+        if ($request->type == 'income') {
+            $categories = IncomeCategoryFacade::allActive();
+            return $categories;
+        }
+
+        return [];
+    }
+}

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ExpenseCategoryController;
 use App\Http\Controllers\Admin\IncomeCategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\User\WalletController;
+use App\Http\Controllers\User\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,8 +53,8 @@ Route::middleware(['auth', 'role:user'])
             ->name('dashboard');
 
         Route::post('status-change-wallet', [WalletController::class, 'updateWalletStatus'])->name('update.wallet.status');
+        Route::get('/transactions/categories-by-type', [TransactionController::class, 'getCategoryByType']);
 
         Route::resource('wallets', WalletController::class);
-
-        // Route::resource('transactions', \App\Http\Controllers\User\TransactionController::class);
+        Route::resource('transactions', TransactionController::class);
     });

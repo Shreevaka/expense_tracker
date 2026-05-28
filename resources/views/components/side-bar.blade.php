@@ -170,6 +170,12 @@
                 <span>Wallets</span>
             </a>
         </li>
+        <li class="menu-item">
+            <a href="{{ route('user.transactions.index') }}" class="menu-link {{ $activePage == 'transaction' ? 'active' : '' }}">
+                <i class="fas fa-wallet"></i>
+                <span>Transactions</span>
+            </a>
+        </li>
         @endrole
 
         @role('admin')

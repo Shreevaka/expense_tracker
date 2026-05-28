@@ -412,3 +412,8 @@ body {
     background-color: #e2e8f0;
     width: 100%;
 }
+
+.dropify-message p {
+    font-size: 16px !important; /* Adjust the font size */
+    color: #a3a3a3 !important; /* Adjust the color if needed */
+}

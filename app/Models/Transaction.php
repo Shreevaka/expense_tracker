@@ -9,8 +9,11 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'wallet_id', 'category_id', 'category_type', 'title', 'description', 'amount', 'currency', 'exchange_rate', 'wallet_currency_amount', 'transaction_date', 'image_path'];
+
     protected $appends = [
         'category',
+        'image_url',
     ];
 
     public function category()
@@ -39,5 +42,14 @@ class Transaction extends Model
         }
 
         return $category;
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image_path) {
+            return asset('storage/' . $this->image_path);
+        } else {
+            return null;
+        }
     }
 }
