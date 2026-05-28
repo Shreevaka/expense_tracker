@@ -93,6 +93,33 @@
         color: #fff;
         border-color: var(--primary-color);
     }
+
+    .crypto-item {
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #f1f5f9;
+        background-color: #ffffff;
+    }
+
+    .crypto-item:hover {
+        background-color: #f8fafc;
+        transform: translateY(-2px);
+        border-color: #e2e8f0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .bg-secondary-soft {
+        background-color: rgba(108, 117, 125, 0.1);
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(1.15); }
+    }
+
+    .animate-pulse {
+        animation: pulse 2s infinite ease-in-out;
+        display: inline-block;
+    }
 </style>
 @endpush
 @section('content')
@@ -141,8 +168,8 @@
             </div>
             <div class="stat-info">
                 <span class="stat-label">Total Expenses</span>
-                <h2 class="stat-value">{{ number_format($totalExpenseAmountAll, 2) }}</h2>
-                <span class="stat-trend text-danger"> All time spending
+                <h2 class="stat-value">{{ number_format($totalExpenseAmount, 2) }}</h2>
+                <span class="stat-trend text-danger"> This month spending
                 </span>
             </div>
         </div>
@@ -155,8 +182,8 @@
             </div>
             <div class="stat-info">
                 <span class="stat-label">Total Income</span>
-                <h2 class="stat-value">{{ number_format($totalIncomeAmountAll, 2) }}</h2>
-                <span class="stat-trend text-success">All time income
+                <h2 class="stat-value">{{ number_format($totalIncomeAmount, 2) }}</h2>
+                <span class="stat-trend text-success">this month income
                 </span>
             </div>
         </div>
@@ -242,50 +269,60 @@
 
     <!-- Quick Stats/Actions -->
     <div class="col-12 col-lg-4">
-        <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
-            <div class="card-body p-0">
-                <div class="bg-indigo p-4 text-white">
-                    <h6 class="text-white-50 small text-uppercase fw-bold mb-3">Quick Summary</h6>
-                    <h3 class="mb-0 fw-bold">{{ $totalExpenseAmount }}</h3>
-                    <p class="small mb-0 opacity-75">Total Expense this month</p>
-                </div>
-                <div class="bg-white p-4 text-white">
-                    <h3 class="mb-0 fw-bold text-indigo">{{ $totalIncomeAmount }}</h3>
-                    <p class="small mb-0 opacity-75 text-indigo">Total Income this month</p>
-                </div>
-            </div>
-        </div>
 
         @if(!empty($coins) && is_array($coins))
-            <div class="row">
-                @foreach ($coins as $name => $value)
-
-                    @php
-                        // safely get USD value
-                        $price = $value['usd'] ?? 0;
-                    @endphp
-
-                    <div class="col-md-3 col-sm-6 mb-3">
-                        <div class="card shadow-sm border-0">
-                            <div class="card-body text-center">
-
-                                <h6 class="text-uppercase text-muted">
-                                    {{ ucfirst($name) }}
-                                </h6>
-
-                                <h4 class="fw-bold text-primary">
-                                    ${{ number_format($price, 2) }}
-                                </h4>
-
-                            </div>
-                        </div>
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold mb-0 text-dark">
+                            <i class="fab fa-bitcoin text-warning me-2 animate-pulse"></i>Crypto Rates
+                        </h6>
+                        <span class="badge bg-warning-soft text-warning fw-semibold px-2 py-1" style="font-size: 0.75rem;">Live</span>
                     </div>
-
-                @endforeach
+                    <div class="d-flex flex-column gap-3">
+                        @foreach ($coins as $name => $value)
+                            @php
+                                $price = $value['usd'] ?? 0;
+                                
+                                $coinIcons = [
+                                    'bitcoin' => ['icon' => 'fab fa-bitcoin', 'bg' => 'bg-warning-soft', 'text' => 'text-warning'],
+                                    'ethereum' => ['icon' => 'fab fa-ethereum', 'bg' => 'bg-primary-soft', 'text' => 'text-primary'],
+                                    'solana' => ['icon' => 'fas fa-dice-d20', 'bg' => 'bg-info-soft', 'text' => 'text-info'],
+                                    'dogecoin' => ['icon' => 'fas fa-paw', 'bg' => 'bg-warning-soft', 'text' => 'text-warning'],
+                                    'tether' => ['icon' => 'fas fa-dollar-sign', 'bg' => 'bg-success-soft', 'text' => 'text-success'],
+                                    'binancecoin' => ['icon' => 'fas fa-coins', 'bg' => 'bg-warning-soft', 'text' => 'text-warning'],
+                                    'ripple' => ['icon' => 'fas fa-bolt', 'bg' => 'bg-info-soft', 'text' => 'text-info'],
+                                    'cardano' => ['icon' => 'fas fa-link', 'bg' => 'bg-primary-soft', 'text' => 'text-primary'],
+                                ];
+                                
+                                $lowerName = strtolower($name);
+                                $coinStyle = $coinIcons[$lowerName] ?? ['icon' => 'fas fa-coins', 'bg' => 'bg-secondary-soft', 'text' => 'text-secondary'];
+                            @endphp
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 crypto-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="stat-icon {{ $coinStyle['bg'] }} {{ $coinStyle['text'] }} rounded-3" style="width: 40px; height: 40px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;">
+                                        <i class="{{ $coinStyle['icon'] }}"></i>
+                                    </div>
+                                    <div>
+                                        <span class="fw-bold d-block text-dark" style="font-size: 0.9rem;">{{ ucfirst($name) }}</span>
+                                        <span class="text-muted text-uppercase" style="font-size: 0.75rem;">{{ substr($name, 0, 3) }} / USD</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="fw-bold d-block text-dark" style="font-size: 0.95rem;">
+                                        ${{ number_format($price, 2) }}
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         @else
-            <div class="alert alert-warning text-center">
-                Crypto data temporarily unavailable. Please try again later.
+            <div class="alert alert-warning text-center rounded-4 border-0 shadow-sm py-4">
+                <i class="fas fa-exclamation-triangle text-warning mb-2 fa-2x"></i>
+                <div class="fw-semibold">Crypto data temporarily unavailable</div>
+                <div class="small text-muted mt-1">Please try again later.</div>
             </div>
         @endif
 

@@ -28,8 +28,6 @@ class DashboardController extends Controller
             $currentMonth = now()->format('Y-m');
             $totalExpenseAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'expense', $currentMonth);
             $totalIncomeAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'income', $currentMonth);
-            $totalExpenseAmountAll = TransactionFacade::userTotalAmountInWalletByCategory(0, 'expense');
-            $totalIncomeAmountAll = TransactionFacade::userTotalAmountInWalletByCategory(0, 'income');
 
             $response = Http::withHeaders([
                 'x_cg_demo_api_key' => Config::get('currency.coins_api_key'),
@@ -49,9 +47,7 @@ class DashboardController extends Controller
                 $coins = $data;
             }
 
-            // dd($coins);
-
-            return view('pages.user.dashboard.index', compact('transactions','currencies','wallets','recentWalletId','totalExpenseAmount','totalIncomeAmount','totalCount','totalWalletCount','totalExpenseAmountAll','totalIncomeAmountAll','coins'));
+            return view('pages.user.dashboard.index', compact('transactions','currencies','wallets','recentWalletId','totalExpenseAmount','totalIncomeAmount','totalCount','totalWalletCount','coins'));
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Something went wrong');
         }
