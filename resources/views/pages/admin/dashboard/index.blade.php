@@ -15,10 +15,9 @@
                 <i class="fas fa-file-invoice text-primary"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Total Invoices</span>
-                <h2 class="stat-value">1,284</h2>
-                <span class="stat-trend text-success">
-                    <i class="fas fa-arrow-up me-1"></i> 12% increase
+                <span class="stat-label">Total Users</span>
+                <h2 class="stat-value">{{ sprintf('%02d', $totalCount) }}</h2>
+                <span class="stat-trend text-muted">All registered users
                 </span>
             </div>
         </div>
@@ -27,43 +26,26 @@
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card animate-up" style="animation-delay: 0.2s">
             <div class="stat-icon bg-success-soft">
-                <i class="fas fa-check-circle text-success"></i>
+                <i class="fas fa-wallet text-success"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Paid Amount</span>
-                <h2 class="stat-value">$42.5k</h2>
-                <span class="stat-trend text-success">
-                    <i class="fas fa-arrow-up me-1"></i> 8% increase
+                <span class="stat-label">Total Wallets</span>
+                <h2 class="stat-value">{{ sprintf('%02d', $totaleWallets) }}</h2>
+                <span class="stat-trend text-success">All wallets
                 </span>
             </div>
         </div>
     </div>
 
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="stat-card animate-up" style="animation-delay: 0.3s">
-            <div class="stat-icon bg-warning-soft">
-                <i class="fas fa-clock text-warning"></i>
+        <div class="stat-card animate-up" style="animation-delay: 0.1s">
+            <div class="stat-icon bg-primary-soft">
+                <i class="fas fa-exchange-alt text-primary"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Pending</span>
-                <h2 class="stat-value">$12.8k</h2>
-                <span class="stat-trend text-danger">
-                    <i class="fas fa-arrow-up me-1"></i> 2% increase
-                </span>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="stat-card animate-up" style="animation-delay: 0.4s">
-            <div class="stat-icon bg-info-soft">
-                <i class="fas fa-users text-info"></i>
-            </div>
-            <div class="stat-info">
-                <span class="stat-label">New Clients</span>
-                <h2 class="stat-value">48</h2>
-                <span class="stat-trend text-success">
-                    <i class="fas fa-arrow-up me-1"></i> 24% increase
+                <span class="stat-label">Total Transactions</span>
+                <h2 class="stat-value">{{ sprintf('%02d', $totaltransactions) }}</h2>
+                <span class="stat-trend text-muted">All transactions count
                 </span>
             </div>
         </div>

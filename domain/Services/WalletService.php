@@ -23,6 +23,11 @@ class WalletService
         return $this->wallet->where('user_id', auth()->id())->get();
     }
 
+    public function allWallets()
+    {
+        return $this->wallet->get();
+    }
+
     public function recentWallet()
     {
         return $this->wallet->where('user_id', auth()->id())->latest('updated_at')->first();
