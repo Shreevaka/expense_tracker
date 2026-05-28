@@ -8,6 +8,7 @@ use Throwable;
 use domain\Facades\WalletFacade;
 use domain\Facades\TransactionFacade;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Http;
 
 class DashboardController extends Controller
 {
@@ -30,7 +31,27 @@ class DashboardController extends Controller
             $totalExpenseAmountAll = TransactionFacade::userTotalAmountInWalletByCategory(0, 'expense');
             $totalIncomeAmountAll = TransactionFacade::userTotalAmountInWalletByCategory(0, 'income');
 
-            return view('pages.user.dashboard.index', compact('transactions','currencies','wallets','recentWalletId','totalExpenseAmount','totalIncomeAmount','totalCount','totalWalletCount','totalExpenseAmountAll','totalIncomeAmountAll'));
+            $response = Http::withHeaders([
+                'x_cg_demo_api_key' => Config::get('currency.coins_api_key'),
+            ])->get(
+                'https://api.coingecko.com/api/v3/simple/price',
+                [
+                    'ids' => 'bitcoin,ethereum,dogecoin,solana,cardano',
+                    'vs_currencies' => 'usd'
+                ]
+            );
+
+            $data = $response->json();
+
+            $coins = [];
+
+            if (!isset($data['status']['error_code'])) {
+                $coins = $data;
+            }
+
+            // dd($coins);
+
+            return view('pages.user.dashboard.index', compact('transactions','currencies','wallets','recentWalletId','totalExpenseAmount','totalIncomeAmount','totalCount','totalWalletCount','totalExpenseAmountAll','totalIncomeAmountAll','coins'));
         } catch (Throwable $th) {
             return redirect()->back()->with('error', 'Something went wrong');
         }

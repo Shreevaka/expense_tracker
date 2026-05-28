@@ -256,6 +256,39 @@
             </div>
         </div>
 
+        @if(!empty($coins) && is_array($coins))
+            <div class="row">
+                @foreach ($coins as $name => $value)
+
+                    @php
+                        // safely get USD value
+                        $price = $value['usd'] ?? 0;
+                    @endphp
+
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body text-center">
+
+                                <h6 class="text-uppercase text-muted">
+                                    {{ ucfirst($name) }}
+                                </h6>
+
+                                <h4 class="fw-bold text-primary">
+                                    ${{ number_format($price, 2) }}
+                                </h4>
+
+                            </div>
+                        </div>
+                    </div>
+
+                @endforeach
+            </div>
+        @else
+            <div class="alert alert-warning text-center">
+                Crypto data temporarily unavailable. Please try again later.
+            </div>
+        @endif
+
         <div class="card border-0 shadow-sm rounded-4">
             <div class="card-body p-4">
                 <h6 class="fw-bold mb-3">Quick Actions</h6>
