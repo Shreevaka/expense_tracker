@@ -11,7 +11,7 @@ use domain\Facades\ExpenseCategoryFacade;
 use domain\Facades\IncomeCategoryFacade;
 use domain\Facades\ImageFacade;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Log; 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 
@@ -26,7 +26,7 @@ class TransactionController extends Controller
 
             $transactions = TransactionFacade::allWithParamAndPaginate($request->all());
 
-            $alltransactions = TransactionFacade::all();
+            $alltransactions = TransactionFacade::userAll();
             $totalCount = $alltransactions->count();
             $totalExpenseAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'expense');
             $totalIncomeAmount = TransactionFacade::userTotalAmountInWalletByCategory(0, 'income');

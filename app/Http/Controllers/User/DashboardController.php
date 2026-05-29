@@ -24,7 +24,7 @@ class DashboardController extends Controller
             $recentWallet = WalletFacade::recentWallet();
             $recentWalletId = $recentWallet?->id;
 
-            $alltransactions = TransactionFacade::all();
+            $alltransactions = TransactionFacade::userAll();
             $totalCount = $alltransactions->count();
             $totalWalletCount = $wallets->count();
 

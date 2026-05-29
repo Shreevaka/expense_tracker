@@ -25,6 +25,11 @@ class TransactionService
         return $this->transaction->all();
     }
 
+    public function userAll()
+    {
+        return $this->transaction->where('user_id', auth()->id())->get();
+    }
+
     public function allWithParamAndPaginate($data, $limit = 10)
     {
         $query = $this->transaction
@@ -66,7 +71,7 @@ class TransactionService
         } elseif ($data['type'] == 'income') {
             $categoryType = 'App\Models\IncomeCategory';
         }
-        
+
         $transaction = $this->transaction->create([
             'user_id' => auth()->id(),
             'title' => $data['title'],
@@ -128,7 +133,7 @@ class TransactionService
         }
 
         return $query->sum('wallet_currency_amount');
-        
+
     }
 
     public function userLatestTransaction($limit = 5)
