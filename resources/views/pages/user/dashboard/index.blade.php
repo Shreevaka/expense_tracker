@@ -153,7 +153,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-12 col-sm-6 col-xl-3">
         <div class="stat-card animate-up" style="animation-delay: 0.2s">
             <div class="stat-icon bg-success-soft">
@@ -326,7 +326,7 @@
                         @foreach ($coins as $name => $value)
                             @php
                                 $price = $value['usd'] ?? 0;
-                                
+
                                 $coinIcons = [
                                     'bitcoin' => ['icon' => 'fab fa-bitcoin', 'bg' => 'bg-warning-soft', 'text' => 'text-warning'],
                                     'ethereum' => ['icon' => 'fab fa-ethereum', 'bg' => 'bg-primary-soft', 'text' => 'text-primary'],
@@ -337,7 +337,7 @@
                                     'ripple' => ['icon' => 'fas fa-bolt', 'bg' => 'bg-info-soft', 'text' => 'text-info'],
                                     'cardano' => ['icon' => 'fas fa-link', 'bg' => 'bg-primary-soft', 'text' => 'text-primary'],
                                 ];
-                                
+
                                 $lowerName = strtolower($name);
                                 $coinStyle = $coinIcons[$lowerName] ?? ['icon' => 'fas fa-coins', 'bg' => 'bg-secondary-soft', 'text' => 'text-secondary'];
                             @endphp
@@ -379,9 +379,11 @@
                     <a href="{{ route('user.wallets.index') }}" class="btn btn-outline-light text-dark border rounded-3 py-2 text-start">
                         <i class="fas fa-wallet me-2"></i> View All Wallet
                     </a>
-                    <a href="{{ route('user.wallets.show', $recentWalletId) }}" class="btn btn-outline-light text-dark border rounded-3 py-2 text-start">
-                        <i class="fas fa-wallet me-2"></i> Check Recent Wallet
-                    </a>
+                    @if($recentWalletId)
+                        <a href="{{ route('user.wallets.show', $recentWalletId) }}" class="btn btn-outline-light text-dark border rounded-3 py-2 text-start">
+                            <i class="fas fa-wallet me-2"></i> Check Recent Wallet
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -413,7 +415,7 @@
                             Wallet <span class="text-danger">*</span>
                         </label>
 
-                        <select name="wallet_id" class="form-control form-control-modern" required>
+                        <select name="wallet_id" class="form-control form-control-modern" required id="wallet">
                             <option value="">Select Wallet</option>
                             @foreach($wallets as $wallet)
                                 <option value="{{ $wallet->id }}">{{ $wallet->name }}</option>
@@ -457,7 +459,7 @@
                             Currency <span class="text-danger">*</span>
                         </label>
 
-                        <select name="currency" class="form-control form-control-modern" required>
+                        <select name="currency" id="currency" class="form-control form-control-modern" required>
                             <option value="">Select Currency</option>
                             @foreach($currencies as $currency)
                                 <option value="{{ $currency }}">{{ $currency }}</option>
@@ -481,7 +483,7 @@
                         <label for="create_description" class="form-label fw-semibold text-muted">Description</label>
                         <textarea class="form-control form-control-modern" id="create_description" name="description" rows="4" placeholder="Briefly describe transaction..."></textarea>
                     </div>
-                    
+
                     <label for="image" class="form-label fw-semibold text-muted">Image</label>
                     <input type="file" name="image" class="form-control transaction-image">
                 </div>
@@ -504,7 +506,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        
+
         $('.transaction-image').dropify();
 
         // CSRF Token setup for AJAX requests
@@ -512,6 +514,27 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+
+        $('#wallet').select2({
+            placeholder: 'Select Wallet',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
+        });
+        $('#type').select2({
+            placeholder: 'Select Type',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
+        });
+        $('#category_id').select2({
+            placeholder: 'Select Category',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
+        });
+        $('#currency').select2({
+            placeholder: 'Select Currency',
+            dropdownParent: $('#createTransactionModal'),
+            width:'100%'
         });
     });
 
@@ -537,5 +560,25 @@
             }
         });
     });
+    //  $('#wallet').select2({
+    //         placeholder: 'Select Wallet',
+    //         dropdownParent: $('#createTransactionModal'),
+    //         width:'100%'
+    //     });
+    //     $('#type').select2({
+    //         placeholder: 'Select Type',
+    //         dropdownParent: $('#createTransactionModal'),
+    //         width:'100%'
+    //     });
+    //     $('#category_id').select2({
+    //         placeholder: 'Select Category',
+    //         dropdownParent: $('#createTransactionModal'),
+    //         width:'100%'
+    //     });
+    //     $('#currency').select2({
+    //         placeholder: 'Select Currency',
+    //         dropdownParent: $('#createTransactionModal'),
+    //         width:'100%'
+    //     });
 </script>
 @endpush

@@ -16,11 +16,13 @@ class DashboardController extends Controller
     public function index()
     {
         try {
+            // dd('s');
 
             $transactions = TransactionFacade::userLatestTransaction();
             $currencies = Config::get('currency.currency_list_for_api');
             $wallets = WalletFacade::all();
-            $recentWalletId = WalletFacade::recentWallet()->id;
+            $recentWallet = WalletFacade::recentWallet();
+            $recentWalletId = $recentWallet?->id;
 
             $alltransactions = TransactionFacade::all();
             $totalCount = $alltransactions->count();

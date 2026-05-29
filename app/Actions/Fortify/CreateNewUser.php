@@ -24,7 +24,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-            'contact_no' => ['required', 'regex:/^[0-9]+$/', 'max:15'],
+            'contact_no' => ['required', 'regex:/^\+[0-9]{11,14}$/'],
         ])->validate();
 
         $user = User::create([

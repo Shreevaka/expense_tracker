@@ -22,7 +22,7 @@
             </div>
             <div class="stat-info">
                 <span class="stat-label">Total Wallets</span>
-                <h2 class="stat-value text-dark">{{ $totalCount }}</h2>
+                <h2 class="stat-value text-dark" data-stat="wallet-count">{{ $totalCount }}</h2>
                 <span class="stat-trend text-muted">All registered wallets</span>
             </div>
         </div>
@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-12 col-sm-6 col-xl-4">
         <div class="stat-card border-left-success">
             <div class="stat-icon bg-success-soft text-success">
@@ -98,7 +98,7 @@
                 <tbody>
                     @forelse($wallets as $wallet)
                         <tr id="row-{{ $wallet->id }}" class="table-row-modern">
-                            
+
                             <td class="ps-4">
                                 <span class="text-muted">{{ $wallet->name }}</span>
                             </td>
@@ -120,8 +120,8 @@
                             <td>
                                 <div class="status-toggle-wrapper">
                                     <label class="switch-ios">
-                                        <input type="checkbox" class="status-toggle-checkbox" 
-                                               data-id="{{ $wallet->id }}" 
+                                        <input type="checkbox" class="status-toggle-checkbox"
+                                               data-id="{{ $wallet->id }}"
                                                {{ $wallet->is_active ? 'checked' : '' }}>
                                         <span class="slider-ios"></span>
                                     </label>
@@ -143,7 +143,7 @@
                                     </a>
 
                                     <!-- Edit Action -->
-                                    <button class="btn btn-action btn-action-warning edit-wallet-btn" 
+                                    <button class="btn btn-action btn-action-warning edit-wallet-btn"
                                             data-id="{{ $wallet->id }}"
                                             data-name="{{ $wallet->name }}"
                                             data-description="{{ $wallet->description }}"
@@ -153,14 +153,14 @@
 
                                     <!-- Delete Action -->
                                     @if($wallet->transactions->count() > 0)
-                                        <button class="btn btn-action btn-action-danger delete-wallet-btn" 
-                                                data-id="{{ $wallet->id }}" 
+                                        <button class="btn btn-action btn-action-danger delete-wallet-btn"
+                                                data-id="{{ $wallet->id }}"
                                                 title="Delete Wallet" disabled >
                                             <i class="far fa-trash-alt"></i>
                                         </button>
                                     @else
-                                        <button class="btn btn-action btn-action-danger delete-wallet-btn" 
-                                                data-id="{{ $wallet->id }}" 
+                                        <button class="btn btn-action btn-action-danger delete-wallet-btn"
+                                                data-id="{{ $wallet->id }}"
                                                 title="Delete Wallet">
                                             <i class="far fa-trash-alt"></i>
                                         </button>
@@ -312,7 +312,7 @@
                 },
                 success: function(response) {
                     checkbox.prop('disabled', false);
-                    
+
                     // Update layout elements
                     if (newStatus === 1) {
                         textElement.text('Active').removeClass('text-danger').addClass('text-success');
@@ -321,7 +321,7 @@
                         textElement.text('Inactive').removeClass('text-success').addClass('text-danger');
                         toastr.info('Wallet deactivated successfully.', 'Status Updated');
                     }
-                    
+
                     // Reload active/inactive stats counters dynamically
                     updateStatsSection();
                 },
@@ -337,7 +337,7 @@
         function updateStatsSection() {
             let active = 0;
             let inactive = 0;
-            
+
             $('.status-toggle-checkbox').each(function() {
                 if ($(this).prop('checked')) {
                     active++;
@@ -405,15 +405,15 @@
                                 // Dynamic row deletion animation
                                 row.fadeOut(500, function() {
                                     $(this).remove();
-                                    
+
                                     // Decrement total stats count
-                                    const totalStats = $('.border-left-primary .stat-value');
-                                    const currentTotal = parseInt(totalStats.text());
+                                    const totalStats = $('[data-stat="wallet-count"]');
+                                    const currentTotal = parseInt(totalStats.text()) || 0;
                                     totalStats.text(Math.max(0, currentTotal - 1));
-                                    
+
                                     // Recalculate status counts
                                     updateStatsSection();
-                                    
+
                                     // Check if table is empty, reload page to show empty state if necessary
                                     if ($('tbody tr').length === 0) {
                                         location.reload();
